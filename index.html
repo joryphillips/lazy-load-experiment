@@ -35,7 +35,7 @@
       min-height: 400px;
       /*                                                                           */
       will-change: opacity;
-      opacity: 0.15;
+      opacity: 0;
       transition: opacity 0.3s ease-in;
     }
     .loaded {
@@ -57,7 +57,6 @@
     images = Array.from(images);
     // iterate through images, pushing source into array, and removing source
     images.forEach(function(image) {
-      var parent = image.parentElement;
       imageSources.push(image.src);
       image.src='';
       // lazy load will break if images do not have a dimension
@@ -66,17 +65,17 @@
     });
   });
 
-  function lazyImageLoad(images) {
-    for (var i = 0; i<images.length; i++) {
+  function lazyImageLoad(pics) {
+    for (var i = 0; i<pics.length; i++) {
       // if half the height of the image is within the viewport (window height plus scrollY). used eigth height to obtain a visible effect.
-      if (images[i].y <= (window.innerHeight +
+      if (pics[i].y <= (window.innerHeight +
         window.scrollY
-        - (images[i].getBoundingClientRect().height / 8))
+        - (pics[i].getBoundingClientRect().height / 8))
       ) {
         //add the source and fade it in
-          images[i].src = imageSources[i];
-          images[i].onload = function () {
-            images[i].classList.add('loaded');
+          pics[i].src = imageSources[i];
+          pics[i].onload = function (e) {
+            e.target.classList.add('loaded');
           }
       }
     }
