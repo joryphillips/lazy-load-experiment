@@ -45,9 +45,9 @@
   </style>
   <script>
   // array to store images
-  let images = [];
+  var images = [];
   // array to receive source links for images
-  let imageSources = [];
+  var imageSources = [];
 
   // after the DOM is loaded but before it is rendered
   document.addEventListener("DOMContentLoaded", function(event) {
@@ -67,7 +67,7 @@
   });
 
   function lazyImageLoad(images) {
-    for (let i = 0; i<images.length; i++) {
+    for (var i = 0; i<images.length; i++) {
       // if half the height of the image is within the viewport (window height plus scrollY). used eigth height to obtain a visible effect.
       if (images[i].y <= (window.innerHeight +
         window.scrollY
