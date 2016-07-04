@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Image Lazy Load Example</title>
-  <style media="screen">
+  <style>
     * {
       margin: 0; padding: 0;
     }
@@ -17,15 +17,22 @@
       color: rgb(230,230,230);
     }
     .feed {
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+              justify-content: center;
       margin-left: auto;
       margin-right: auto;
-      max-width: 1240px;
+      max-width: 1200px;
     }
     .img-container {
-      min-width: 400px;
+      flex: 1 1 400px;
+      -webkit-flex: 1 1 400px; /* Safair flexbox bug fix */
+      max-width: 400px;
       width: 33%;
       background-color: rgb(37,36,36);
     }
@@ -40,6 +47,15 @@
     }
     .loaded {
       opacity: 1;
+    }
+
+    @media (max-device-width: 600px) {
+      .img-container {
+        max-width: 100%;
+        -webkit-flex: none;
+        flex: none;
+        width: 100%;
+      }
     }
 
   </style>
@@ -67,8 +83,10 @@
 
   function lazyImageLoad(pics) {
     for (var i = 0; i<pics.length; i++) {
-      // if half the height of the image is within the viewport (window height plus scrollY). used eigth height to obtain a visible effect.
-      if (pics[i].y <= (window.innerHeight +
+      // if  currentSrc is not empty or does not equal the baseURI, it is loaded. 
+      // (the inverse may not be true depending on the browser, but it does what we need here.)
+      // if half the height of the image is within the viewport (window height plus scrollY). used 1/8 height to obtain a visible effect.
+      if ((pics[i].currentSrc === '' || pics[i].currentSrc === pics[i].baseURI) && pics[i].y <= (window.innerHeight +
         window.scrollY
         - (pics[i].getBoundingClientRect().height / 8))
       ) {
