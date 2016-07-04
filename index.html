@@ -57,7 +57,7 @@
     images = Array.from(images);
     // iterate through images, pushing source into array, and removing source
     images.forEach(function(image) {
-      let parent = image.parentElement;
+      var parent = image.parentElement;
       imageSources.push(image.src);
       image.src='';
       // lazy load will break if images do not have a dimension
