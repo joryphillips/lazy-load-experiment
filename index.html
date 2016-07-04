@@ -1,0 +1,197 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Image Lazy Load Example</title>
+  <style media="screen">
+    * {
+      margin: 0; padding: 0;
+    }
+    body {
+      background-color: rgb(27,27,27)
+    }
+    h3 {
+      margin: 1em auto;
+      max-width: 1200px;
+      font-family: sans-serif;
+      text-align: center;
+      color: rgb(230,230,230);
+    }
+    .feed {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 1240px;
+    }
+    .img-container {
+      min-width: 400px;
+      width: 33%;
+      background-color: rgb(37,36,36);
+    }
+    img {
+      /* also added in js -- necessary for this lazy load implementation to work   */
+      width: 100%;
+      min-height: 400px;
+      /*                                                                           */
+      will-change: opacity;
+      opacity: 0.15;
+      transition: opacity 0.3s ease-in;
+    }
+    .loaded {
+      opacity: 1;
+    }
+
+  </style>
+  <script>
+  // array to store images
+  let images = [];
+  // array to receive source links for images
+  let imageSources = [];
+
+  // after the DOM is loaded but before it is rendered
+  document.addEventListener("DOMContentLoaded", function(event) {
+    // get image collection
+    images = document.getElementsByTagName('img');
+    // convert HTML collection to an array
+    images = Array.from(images);
+    // iterate through images, pushing source into array, and removing source
+    images.forEach(function(image) {
+      let parent = image.parentElement;
+      imageSources.push(image.src);
+      image.src='';
+      // lazy load will break if images do not have a dimension
+      image.style.width='100%';
+      image.style.minHeight='400px';
+    });
+  });
+
+  function lazyImageLoad(images) {
+    for (let i = 0; i<images.length; i++) {
+      // if half the height of the image is within the viewport (window height plus scrollY). used eigth height to obtain a visible effect.
+      if (images[i].y <= (window.innerHeight +
+        window.scrollY
+        - (images[i].getBoundingClientRect().height / 8))
+      ) {
+        //add the source and fade it in
+          images[i].src = imageSources[i];
+          images[i].onload = function () {
+            images[i].classList.add('loaded');
+          }
+      }
+    }
+  }
+
+  window.onload = function() {
+    lazyImageLoad(images);
+  };
+
+  window.onresize = function() {
+    lazyImageLoad(images);
+  };
+
+  document.addEventListener("scroll", function(e) {
+    lazyImageLoad(images);
+  });
+
+
+
+  </script>
+</head>
+<body>
+  <h3>Image Lazy Load Example</h3>
+
+<div class="feed">
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=1" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=2" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=3" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=4" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=5" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=6" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=7" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=8" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=9" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=10" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=11" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=12" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=13" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=14" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=15" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=16" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=17" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=18" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=19" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=20" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=21" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=22" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=23" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=24" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=25" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=26" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=27" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=28" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=29" alt="">
+  </div>
+  <div class="img-container">
+    <img src="https://unsplash.it/400/400/?random=30" alt="">
+  </div>
+</div>
+</body>
+</html>
