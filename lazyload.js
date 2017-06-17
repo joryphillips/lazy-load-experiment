@@ -55,11 +55,12 @@
   const checkFadeInStatus = (index) => {
     setTimeout(() => {
       const pic = images[index];
+      // middle-out fade-in check :P
       if (pic && readyToFadeIn(pic, images)) {
-          pic.classList.add('visible');
-        checkFadeInStatus(index +1);
+        pic.classList.add('visible');
+        checkFadeInStatus(index + 1);
       } else if (index) {
-        checkFadeInStatus(index -1);
+        checkFadeInStatus(index - 1);
       }
     }, FADE_IN_DELAY);
   };
