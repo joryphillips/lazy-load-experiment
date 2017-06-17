@@ -2,240 +2,105 @@
 <head>
   <meta charset="UTF-8">
   <title>Image Lazy Load Example</title>
-  <style>
-    * {
-      margin: 0; padding: 0;
-    }
-    body {
-      background-color: rgb(27,27,27)
-    }
-    h3 {
-      margin: 1em auto;
-      max-width: 1200px;
-      font-family: sans-serif;
-      text-align: center;
-      color: rgb(230,230,230);
-    }
-    .feed {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-              justify-content: center;
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 1200px;
-    }
-    .img-container {
-      flex: 1 1 400px;
-      -webkit-flex: 1 1 400px; /* Safari flexbox bug fix */
-      max-width: 400px;
-      width: 33%;
-      background-color: rgb(37,36,36);
-    }
-    img {
-      /* also added in js -- necessary for this lazy load implementation to work   */
-      width: 100%;
-      height: 400px;
-      /*                                                                           */
-      will-change: opacity;
-      opacity: 0;
-      transition: opacity 0.3s ease-in;
-    }
-    .visible {
-      opacity: 1;
-    }
 
-    @media (max-device-width: 600px) {
-      .img-container {
-        max-width: 100%;
-        -webkit-flex: none;
-        flex: none;
-        width: 100%;
-      }
-    }
-
-  </style>
-  <script>
-
-    
-  // array to store images
-  let images = [];
-  // array to receive source links for images
-  let imageSources = [];
-
-  const removeAndCopyImageSources = () => {
-    // get image collection
-    images = document.getElementsByTagName('img');
-    // convert HTML collection to an array
-    images = Array.from(images);
-    // iterate through images, pushing sources into array, and removing src from orig
-    images.forEach( (image)=> {
-      imageSources.push(image.src);
-      image.removeAttribute('src');
-      // lazy load will break if images do not have a dimension
-      image.style.width='100%';
-      image.style.height='400px';
-    });
-  };
-
-  const shouldBeLoaded = (pic) => {
-    // if 1/4 the height of the image is within the viewport (window height plus scrollY). 
-     return ((pic.src === undefined || pic.src === '')
-              &&
-              pic.y <= (  window.innerHeight +
-                              window.scrollY -
-                              (pic.getBoundingClientRect().height / 4))
-            );
-  };
-
-  const getLoadPromise = (pic) => {
-      // add the source, removing it from queue
-      pic.src = imageSources.shift();
-      // resolve Promise onload
-      return new Promise(resolve => {
-        pic.addEventListener('load', () => resolve(pic));
-      });
-  };
-
-  const lazyImageLoad = (pics) => {
-    return pics
-      .filter( pic => shouldBeLoaded(pic))
-      .map( (pic) => getLoadPromise(pic));
-  };
-
-  const fadeInSequence = (elements, duration = 250, index = 0) => {
-    setTimeout(() => {
-      const targetEl = elements[index];
-      if (index < elements.length && targetEl.src) {
-        targetEl.classList.add('visible');
-        fadeInSequence(elements, duration, index + 1);
-      }
-    }, duration);
-  };
-
-  const loadAndFadeIn = (images) => {
-    Promise.all(lazyImageLoad(images)).then( pics => {
-      if (pics.length) {
-        fadeInSequence(pics);
-      }
-    });
-  };
-
-  let timeout = 0;
-  const delayLoad = () => {
-    // a single scroll can fire multiple events, so we use setTimeout to capture fewer events
-    clearTimeout(timeout);
-    timeout = setTimeout( ()=>{
-      loadAndFadeIn(images);
-    }, 250);  
-  };
-
-  // after the DOM is loaded but before it is rendered
-  document.addEventListener("DOMContentLoaded", ()=> removeAndCopyImageSources());
-  window.onload = () => loadAndFadeIn(images);
-  window.onresize = () => loadAndFadeIn(images);
-  document.addEventListener("scroll", () => delayLoad());
-
-  </script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="lazyload.js"></script>
 </head>
+
 <body>
   <h3>Image Lazy Load Example</h3>
 
-<div class="feed">
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=1">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=2">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=3">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=4">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=5">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=6">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=7">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=8">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=9">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=10">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=11">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=12">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=13">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=14">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=15">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=16">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=17">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=18">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=19">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=20">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=21">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=22">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=23">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=24">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=25">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=26">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=27">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=28">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=29">
-  </div>
-  <div class="img-container">
-    <img src="https://unsplash.it/400/400/?random=30">
-  </div>
-</div>
+  <section class="feed">
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=1">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=2">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=3">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=4">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=5">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=6">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=7">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=8">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=9">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=10">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=11">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=12">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=13">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=14">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=15">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=16">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=17">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=18">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=19">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=20">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=21">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=22">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=23">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=24">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=25">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=26">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=27">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=28">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=29">
+    </div>
+    <div class="img-container">
+      <img src="https://unsplash.it/400/400/?random=30">
+    </div>
+  </section>
 </body>
 </html>
